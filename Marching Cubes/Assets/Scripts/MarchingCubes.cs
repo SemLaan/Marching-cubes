@@ -42,7 +42,7 @@ public class MarchingCubes : MonoBehaviour
                             cubeIndex += 1 << i;
                     }
 
-
+                    
 
                 }
             }

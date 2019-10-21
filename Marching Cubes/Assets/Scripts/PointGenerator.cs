@@ -65,7 +65,10 @@ public class PointGenerator
                     sphere.transform.SetParent(pointContainer);
                     if (PointDensity(x, y, z) <= 0)
                     {
-                        sphere.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(1, 0, (PointDensity(x, y, z) - _min) / colorMultiplier);
+
+                        MeshRenderer meshRenderer = sphere.GetComponent<MeshRenderer>();
+
+                        meshRenderer.material.color = Color.HSVToRGB(1, 0, (PointDensity(x, y, z) - _min) / colorMultiplier);
                     }
 
                 }
