@@ -10,6 +10,7 @@ public class MarchingCubes : MonoBehaviour
     [SerializeField] private Transform pointHolder;
     [SerializeField] private float pointScale;
     [SerializeField] private int gridSize;
+    [SerializeField] private MeshFilter meshFilter;
 
     private void Awake()
     {
@@ -17,7 +18,7 @@ public class MarchingCubes : MonoBehaviour
 
         pointGenerator = new PointGenerator(pointHolder, -10, 10, gridSize, pointScale);
 
-        pointGenerator.DrawPoints();
+        //pointGenerator.DrawPoints();
 
         CreateMesh();
 
@@ -26,7 +27,11 @@ public class MarchingCubes : MonoBehaviour
     private void CreateMesh()
     {
 
-        for (int x = 0; x < gridSize-1; x++)
+        Mesh mesh = new Mesh();
+        LinkedList<Vector3> vertices = new LinkedList<Vector3>();
+        int numberOfVertices = 0;
+
+        for (int x = 0; x < gridSize - 1; x++)
         {
             for (int y = 0; y < gridSize - 1; y++)
             {
@@ -42,11 +47,38 @@ public class MarchingCubes : MonoBehaviour
                             cubeIndex += 1 << i;
                     }
 
-                    
+                    for (int i = 0; LookupTables.triTable[cubeIndex, i] != -1; i++)
+                    {
+
+                        Vector3 localPosition = LookupTables.edgeIndexToPositionTable[LookupTables.triTable[cubeIndex, i]];
+                        localPosition.x += x;
+                        localPosition.y += y;
+                        localPosition.z += z;
+
+                        vertices.AddLast(localPosition);
+                        numberOfVertices++;
+
+                    }
 
                 }
             }
         }
+
+        Vector3[] verticesArray = new Vector3[numberOfVertices];
+        int[] triangles = new int[numberOfVertices];
+
+        for (int i = 0; i < numberOfVertices; i++)
+        {
+
+            verticesArray[i] = vertices.First.Value;
+            vertices.RemoveFirst();
+            triangles[i] = i;
+
+        }
+
+        mesh.vertices = verticesArray;
+        mesh.triangles = triangles;
+        meshFilter.mesh = mesh;
 
     }
 
