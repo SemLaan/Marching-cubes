@@ -4,6 +4,22 @@ using UnityEngine;
 
 public static class LookupTables
 {
+    
+    public static Vector3[] edgeIndexToPositionTable =
+    {
+        new Vector3(0.5f, 0, 0),//0
+    new Vector3(1, 0, 0.5f),    //1
+    new Vector3(0.5f, 0, 1),    //2
+    new Vector3(0, 0, 0.5f),    //3
+    new Vector3(0.5f, 1, 0),       //4
+    new Vector3(1, 1, 0.5f),       //5
+    new Vector3(0.5f, 1, 1),       //6
+    new Vector3(0, 1, 0.5f),       //7
+    new Vector3(0, 0.5f, 0),       //8
+    new Vector3(1, 0.5f, 0),       //9
+    new Vector3(1, 0.5f, 1),       //10
+    new Vector3(0, 0.5f, 1)        //11
+};
 
     public static int[] edgeTable = {
         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
