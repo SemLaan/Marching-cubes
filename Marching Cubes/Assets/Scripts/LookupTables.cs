@@ -21,6 +21,12 @@ public static class LookupTables
     new Vector3(0, 0.5f, 1)        //11
 };
 
+    public static int[,] edgeToCornerTable = { 
+        {0, 1}, {1, 2}, {3, 2}, {0, 3}, 
+        {4, 5}, {5, 6}, {7, 6}, {4, 7}, 
+        {0, 4}, {1, 5}, {2, 6}, {3, 7},
+    };
+
     public static int[] edgeTable = {
         0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
         0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,

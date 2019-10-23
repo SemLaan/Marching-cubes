@@ -38,15 +38,16 @@ public class PointGenerator
                 for (int z = 0; z < gridSize; z++)
                 {
 
-                    int rand = Random.Range(min, max + 1);
+                    //int rand = Random.Range(min, max + 1);
+                    //int rand = y > 4 ? 1 : -1;
+                    float height = Mathf.PerlinNoise(x*0.07f, z*0.07f);
+                    height *= 30;
+                    int rand = (int) ((y - height) * 50);
 
                     DensityMatrix[x, y, z] = rand;
                 }
             }
         }
-
-        System.Console.WriteLine(DensityMatrix);
-
     }
 
     public void DrawPoints()

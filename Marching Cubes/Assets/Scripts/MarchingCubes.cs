@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,19 +48,25 @@ public class MarchingCubes : MonoBehaviour
                             cubeIndex += 1 << i;
                     }
 
-                    for (int i = 0; LookupTables.triTable[cubeIndex, i] != -1; i++)
+                    if (!(cubeIndex == 0 || cubeIndex == 255))
                     {
 
-                        Vector3 localPosition = LookupTables.edgeIndexToPositionTable[LookupTables.triTable[cubeIndex, i]];
-                        localPosition.x += x;
-                        localPosition.y += y;
-                        localPosition.z += z;
+                        Vector3[] adjustedEdgePositions = CalculateSurfaceLevels(LookupTables.edgeTable[cubeIndex], cubeValues);
 
-                        vertices.AddLast(localPosition);
-                        numberOfVertices++;
+                        for (int i = 0; LookupTables.triTable[cubeIndex, i] != -1; i++)
+                        {
 
+                            //Vector3 localPosition = LookupTables.edgeIndexToPositionTable[LookupTables.triTable[cubeIndex, i]];
+                            Vector3 localPosition = adjustedEdgePositions[LookupTables.triTable[cubeIndex, i]];
+                            localPosition.x += x;
+                            localPosition.y += y;
+                            localPosition.z += z;
+
+                            vertices.AddLast(localPosition);
+                            numberOfVertices++;
+
+                        }
                     }
-
                 }
             }
         }
@@ -78,7 +85,40 @@ public class MarchingCubes : MonoBehaviour
 
         mesh.vertices = verticesArray;
         mesh.triangles = triangles;
+        mesh.RecalculateNormals();
         meshFilter.mesh = mesh;
+        meshFilter.GetComponent<MeshCollider>().sharedMesh = mesh;
+
+    }
+
+    private Vector3[] CalculateSurfaceLevels(int edges, int[] cubeValues)
+    {
+
+        Vector3[] surfaceLevels = new Vector3[12];
+        LookupTables.edgeIndexToPositionTable.CopyTo(surfaceLevels, 0);
+
+        for (int i = 0; i < 12; i++)
+        {
+            if (Convert.ToBoolean(1 << i & edges))
+            {
+
+                float value1 = cubeValues[LookupTables.edgeToCornerTable[i, 0]];
+                float value2 = cubeValues[LookupTables.edgeToCornerTable[i, 1]] - value1;
+                float surfaceLevel = -value1;
+
+                surfaceLevel /= value2;
+
+                if (surfaceLevels[i].x == 0.5f)
+                    surfaceLevels[i].x = surfaceLevel;
+                if (surfaceLevels[i].y == 0.5f)
+                    surfaceLevels[i].y = surfaceLevel;
+                if (surfaceLevels[i].z == 0.5f)
+                    surfaceLevels[i].z = surfaceLevel;
+
+            }
+        }
+
+        return surfaceLevels;
 
     }
 
