@@ -20,6 +20,9 @@ public class TerrainManager : MonoBehaviour
         
         meshGenerator = FindObjectOfType<MeshGenerator>();
 
+        material.SetFloat("minHeight", 0f);
+        material.SetFloat("maxHeight", 150f);
+
         worldGridSize = worldChunkSize * (chunkSize - Vector3Int.one);
         worldGridSize += Vector3Int.one;
         chunks = new Chunk[worldChunkSize.x, worldChunkSize.y, worldChunkSize.z];
@@ -81,10 +84,22 @@ public class TerrainManager : MonoBehaviour
                     int densityValue = 0;
 
                     //densityValue = y > 20 ? 1 : -1;
-                    float height = Mathf.PerlinNoise(x * 0.07f, z * 0.07f);
-                    height *= 30;
-                    densityValue = (int)((y - height) * 50);
+                    float height = Mathf.PerlinNoise(x * 0.01f, z * 0.01f) * 130;
+                    height += Mathf.PerlinNoise(x * 0.03f, z * 0.03f) * 10;
+                    height += Mathf.PerlinNoise(x * 0.09f, z * 0.09f) * 5;
+                    height += Mathf.PerlinNoise(x * 0.018f, z * 0.018f) * 2.5f;
+                    height += Mathf.PerlinNoise(x * 0.036f, z * 0.036f) * 1.25f;
 
+                    if (height < 55)
+                    {
+
+                        height *= 0.05f;
+                        height += 52;
+
+                    }
+
+                    densityValue = (int)((y - height) * 50);
+                    
 
                     densityTensor[x, y, z] = densityValue;
 

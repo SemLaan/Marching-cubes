@@ -176,9 +176,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28be4ccf865f61c488b3ca6bc32649e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldChunkSize: {x: 3, y: 3, z: 3}
+  worldChunkSize: {x: 2, y: 3, z: 2}
   chunkSize: {x: 50, y: 50, z: 50}
-  material: {fileID: 2100000, guid: 74ae68ae1675b6443a3176a26d5a7dbe, type: 2}
+  material: {fileID: 2100000, guid: 88cc51d29ae9fc046a5e3ce72d72ebd5, type: 2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
