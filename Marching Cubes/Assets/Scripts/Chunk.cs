@@ -25,7 +25,7 @@ public class Chunk
         meshObject.transform.parent = parent;
         meshObject.transform.position = position;
 
-        TerrainManager.meshGenerator.RequestMesh(mapData, OnMeshReceived);
+        meshFilter.mesh = MarchingCubes.CreateMesh(mapData).CreateMesh();
 
     }
 
