@@ -8,7 +8,7 @@ public class MapEditor : Editor
 {
 
     //private LayerMask environment;
-
+    private TerrainManager mapGen;
 
     private void OnEnable()
     {
@@ -23,11 +23,33 @@ public class MapEditor : Editor
 
         Event guiEvent = Event.current;
 
-        Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-        RaycastHit rayHit = new RaycastHit();
+        if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
+        {
 
-        Physics.Raycast(ray, out rayHit, 1000);
+            Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+            RaycastHit rayHit = new RaycastHit();
 
+            Debug.Log(Physics.Raycast(ray, out rayHit, 1000f));
+
+            if (Physics.Raycast(ray, out rayHit, 1000f))
+            {
+
+                Vector3 voxelCoord = rayHit.point;
+
+                voxelCoord.x = Mathf.Round(voxelCoord.x);
+                voxelCoord.y = Mathf.Round(voxelCoord.y) + 2;
+                voxelCoord.z = Mathf.Round(voxelCoord.z);
+
+                mapGen.densityTensor[(int)voxelCoord.x, (int)voxelCoord.y, (int)voxelCoord.z] = -10;
+                mapGen.densityTensor[(int)voxelCoord.x+1, (int)voxelCoord.y, (int)voxelCoord.z] = -10;
+                mapGen.densityTensor[(int)voxelCoord.x-1, (int)voxelCoord.y, (int)voxelCoord.z] = -10;
+                mapGen.densityTensor[(int)voxelCoord.x, (int)voxelCoord.y+1, (int)voxelCoord.z] = -10;
+                mapGen.densityTensor[(int)voxelCoord.x, (int)voxelCoord.y-1, (int)voxelCoord.z] = -10;
+                mapGen.densityTensor[(int)voxelCoord.x, (int)voxelCoord.y, (int)voxelCoord.z+1] = -10;
+                mapGen.densityTensor[(int)voxelCoord.x, (int)voxelCoord.y, (int)voxelCoord.z-1] = -10;
+                mapGen.RedrawTerrain();
+            }
+        }
     }
 
 
@@ -35,7 +57,7 @@ public class MapEditor : Editor
     public override void OnInspectorGUI()
     {
 
-        TerrainManager mapGen = target as TerrainManager;
+        mapGen = target as TerrainManager;
 
         DrawDefaultInspector();
 

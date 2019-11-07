@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class TerrainManager : MonoBehaviour
 {
 
     public Vector3Int worldChunkSize;
     public Vector3Int chunkSize;
     private Vector3Int worldGridSize;
+    
     public int[,,] densityTensor;
     public Material material;
 
@@ -21,11 +21,14 @@ public class TerrainManager : MonoBehaviour
     public void RegenerateTerrain()
     {
 
-        foreach (Transform child in transform)
+        if (chunks != null)
         {
+            foreach (Chunk child in chunks)
+            {
 
-            Destroy(child.gameObject);
+                DestroyImmediate(child.meshObject);
 
+            }
         }
 
         meshGenerator = FindObjectOfType<MeshGenerator>();
@@ -38,6 +41,32 @@ public class TerrainManager : MonoBehaviour
         chunks = new Chunk[worldChunkSize.x, worldChunkSize.y, worldChunkSize.z];
 
         GenerateTerrainDensity();
+        GenerateTerrainMesh();
+
+    }
+
+
+
+    public void RedrawTerrain()
+    {
+
+        if (chunks != null)
+        {
+            foreach (Chunk child in chunks)
+            {
+
+                DestroyImmediate(child.meshObject);
+
+            }
+        }
+
+        material.SetFloat("minHeight", 0f);
+        material.SetFloat("maxHeight", 150f);
+
+        worldGridSize = worldChunkSize * (chunkSize - Vector3Int.one);
+        worldGridSize += Vector3Int.one;
+        chunks = new Chunk[worldChunkSize.x, worldChunkSize.y, worldChunkSize.z];
+
         GenerateTerrainMesh();
 
     }
@@ -93,10 +122,10 @@ public class TerrainManager : MonoBehaviour
                 for (int z = 0; z < worldGridSize.z; z++)
                 {
 
-                    int densityValue = 0;
+                    //int densityValue = 0;
 
-                    //densityValue = y > 20 ? 1 : -1;
-                    float height = Mathf.PerlinNoise(x * 0.01f, z * 0.01f) * 130;
+                    int densityValue = y > 10 ? 10 : -10;
+                    /*float height = Mathf.PerlinNoise(x * 0.01f, z * 0.01f) * 130;
                     height += Mathf.PerlinNoise(x * 0.03f, z * 0.03f) * 10;
                     height += Mathf.PerlinNoise(x * 0.09f, z * 0.09f) * 5;
                     height += Mathf.PerlinNoise(x * 0.018f, z * 0.018f) * 2.5f;
@@ -111,7 +140,7 @@ public class TerrainManager : MonoBehaviour
                     }
 
                     densityValue = (int)((y - height) * 50);
-                    
+                    */
 
                     densityTensor[x, y, z] = densityValue;
 

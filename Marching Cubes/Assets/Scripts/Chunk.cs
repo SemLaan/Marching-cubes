@@ -6,7 +6,7 @@ using UnityEngine;
 public class Chunk
 {
 
-    GameObject meshObject;
+    public GameObject meshObject;
     Vector3 position;
 
     MeshRenderer meshRenderer;
@@ -21,12 +21,15 @@ public class Chunk
         meshObject = new GameObject("Terrain Chunk");
         meshRenderer = meshObject.AddComponent<MeshRenderer>();
         meshFilter = meshObject.AddComponent<MeshFilter>();
+        meshCollider = meshObject.AddComponent<MeshCollider>();
         meshRenderer.sharedMaterial = material;
         meshObject.transform.parent = parent;
         meshObject.transform.position = position;
 
-        meshFilter.mesh = MarchingCubes.CreateMesh(mapData).CreateMesh();
+        Mesh mesh = MarchingCubes.CreateMesh(mapData).CreateMesh();
 
+        meshFilter.mesh = mesh;
+        meshCollider.sharedMesh = mesh;
     }
 
     public void UpdateChunk(MapData mapData)
