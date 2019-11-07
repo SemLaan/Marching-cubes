@@ -31,7 +31,7 @@ public class MeshGenerator : MonoBehaviour
 
     public void RequestMesh(MapData mapData, Action<MeshData> callback)
     {
-        print(mapData);
+
         ThreadStart threadStart = delegate {
             MeshThread(mapData, callback);
         };

@@ -21,7 +21,7 @@ public class Chunk
         meshObject = new GameObject("Terrain Chunk");
         meshRenderer = meshObject.AddComponent<MeshRenderer>();
         meshFilter = meshObject.AddComponent<MeshFilter>();
-        meshRenderer.material = material;
+        meshRenderer.sharedMaterial = material;
         meshObject.transform.parent = parent;
         meshObject.transform.position = position;
 

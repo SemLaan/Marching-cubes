@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class TerrainManager : MonoBehaviour
 {
 
@@ -15,9 +16,18 @@ public class TerrainManager : MonoBehaviour
 
     public static MeshGenerator meshGenerator;
 
-    private void Awake()
+    
+
+    public void RegenerateTerrain()
     {
-        
+
+        foreach (Transform child in transform)
+        {
+
+            Destroy(child.gameObject);
+
+        }
+
         meshGenerator = FindObjectOfType<MeshGenerator>();
 
         material.SetFloat("minHeight", 0f);
@@ -31,6 +41,8 @@ public class TerrainManager : MonoBehaviour
         GenerateTerrainMesh();
 
     }
+
+
 
     private void GenerateTerrainMesh()
     {
